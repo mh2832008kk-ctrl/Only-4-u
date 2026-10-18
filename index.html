@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Smooth 60FPS Heart Animation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- خلفية التأثيرات المتطايرة -->
+    <div class="particles" id="particles"></div>
+
+    <div class="heart-wrapper">
+        <svg viewBox="0 0 500 500" class="heart-svg" style="overflow: visible;">
+            <defs>
+                <!-- مسار القلب الهندسي الدقيق والمغلق -->
+                <path id="heartPath" d="M250,400 C250,400 420,280 420,160 C420,80 340,40 280,90 C250,115 250,115 250,115 C250,115 250,115 220,90 C160,40 80,80 80,160 C80,280 250,400 250,400 Z" fill="none"/>
+            </defs>
+            
+            <!-- النصوص المتكررة لملء المسار بالكامل بدون مسح أو اختفاء -->
+            <text class="heart-text">
+                <textPath id="textPathLink1" href="#heartPath" startOffset="0%">
+                    I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   
+                </textPath>
+            </text>
+            <text class="heart-text">
+                <textPath id="textPathLink2" href="#heartPath" startOffset="50%">
+                    I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   I LOVE YOU   •   
+                </textPath>
+            </text>
+        </svg>
+    </div>
+
+    <script>
+        const path1 = document.getElementById('textPathLink1');
+        const path2 = document.getElementById('textPathLink2');
+        const particlesContainer = document.getElementById('particles');
+        
+        let offset = 0;
+        const speed = 0.08; // سرعة 60 فريم ناعمة وثابتة
+
+        function animate() {
+            offset -= speed;
+            if (offset <= -50) offset = 0;
+            
+            // تحريك المسارين لضمان Loop دائم وكامل بدون اختفاء أي حرف
+            path1.setAttribute('startOffset', offset + '%');
+            path2.setAttribute('startOffset', (offset + 50) + '%');
+            
+            requestAnimationFrame(animate);
+        }
+
+        // إنشاء القلوب والنجوم المتطايرة في الخلفية
+        function createParticle() {
+            const particle = document.createElement('div');
+            const isStar = Math.random() > 0.4;
+            particle.className = isStar ? 'particle-star' : 'particle-heart';
+            particle.innerHTML = isStar ? '✦' : '♥';
+            
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            particle.style.fontSize = (Math.random() * 14 + 8) + 'px';
+            particlesContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 9000);
+        }
+
+        setInterval(createParticle, 200);
+        animate();
+    </script>
+</body>
+</html>
